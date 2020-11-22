@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "envimation/ubuntu-xenial"
+  config.vm.box_url = "https://atlas.hashicorp.com/envimation/boxes/ubuntu-xenial"
+
+  config.vm.box_check_update = false
+  config.vm.hostname = "gilman"  
+  config.vm.define "gilman"
+
+  config.vm.network "forwarded_port", guest: 80, host: 80
+  config.vm.network "forwarded_port", guest: 443, host: 443
+
+  config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "public_network", type: "dhcp"
+  config.vm.synced_folder "salt/roots", "/srv/"
+
+  config.vm.provision :salt do |salt|
+    salt.minion_config = "salt/minion"
+    salt.run_highstate = true
+    salt.verbose = true
+  end
+ 
+  config.vm.provision "shell", inline: <<-SHELL
+      apt-get update
+      apt-get install -y apache2
+      apt-get install -y python3-pip
+
+      #py run from salt
+
+      #apache
+      cp -r /vagrant/ApacheInstnace/static/ /var/www
+      cp -fr /vagrant/ApacheInstnace/*.conf /etc/apache2/sites-available/
+      cp -r /vagrant/ApacheInstnace/cert /etc/apache2/certs
+
+      a2enmod ssl headers proxy proxy_http
+      a2ensite 000-default.conf default-ssl.conf
+
+      service apache2 reload
+
+      echo "127.0.0.1 static.com" >> /etc/hosts
+      echo "127.0.0.1 dynamic.com" >> /etc/hosts
+
+  SHELL
+	config.vm.provider "virtualbox" do |vb|
+		vb.gui = false
+		vb.memory = "1024"
+  end
+  
+  
+end
