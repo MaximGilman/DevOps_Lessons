@@ -1,0 +1,29 @@
+services:
+  gitlab_web:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab_web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "22:22"
+    volumes:
+      - "$GITLAB_WEB_HOME/config:/etc/gitlab"
+      - "$GITLAB_WEB_HOME/logs:/var/log/gitlab"
+      - "$GITLAB_WEB_HOME/data:/var/opt/gitlab"
+    networks:
+      - gitlab-ce
+
+  gitlab_runner:
+    image: gitlab/gitlab-runner:alpine-v13.6.0
+    container_name: gitlab_runner
+    volumes:
+      - "$GITLAB_RUNNER_CONFIG:/etc/gitlab-runner"
+      - "$DOCKER_SOCK:/var/run/docker.sock"
+    networks:
+      - gitlab-ce
+
+networks:
+  gitlab_network:
+      gitlab-ce:
+       name: 'runner-bridge'
+       driver: 'bridge'
