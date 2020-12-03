@@ -1,0 +1,2 @@
+docker-compose up -d
+docker run --rm  -it PATH --url URL ce [gitlab-network]
