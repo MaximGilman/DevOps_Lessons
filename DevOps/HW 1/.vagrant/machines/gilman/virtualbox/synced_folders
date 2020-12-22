@@ -1,1 +1,0 @@
-{"virtualbox":{"/srv/":{"guestpath":"/srv","hostpath":"E:/Desktop/Master Degree 1/DevOps/DevOps/HW 1/salt/roots","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"E:/Desktop/Master Degree 1/DevOps/DevOps/HW 1","disabled":false,"__vagrantfile":true}}}
