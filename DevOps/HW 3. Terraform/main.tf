@@ -1,7 +1,8 @@
+
 provider "aws" {
   access_key = ""
   secret_key = ""
-  region = "eu-west-2"
+    region = "eu-west-2"
 }
 
 
@@ -21,8 +22,17 @@ resource "aws_instance" "My_Ubuntu" {
     "Owner" = "Gilman Maxim"
   }
 }
-
-
+resource "aws_db_instance" "My_Db" {
+  name                 = "devops_task_db"
+  engine               = "postgres"
+  instance_class       = "db.t2.micro"
+  username             = "dbadmin"
+  password             = "password"
+  tags = {
+    "Name" = "DevOps AWS",
+    "Owner" = "Gilman Maxim"
+  }
+}
 
 resource "aws_security_group" "my_webserver" {
   name = "WS SG"
@@ -61,4 +71,6 @@ egress = [ {
     "Owner" = "Gilman Maxim"
   }
 }
+
+
 
