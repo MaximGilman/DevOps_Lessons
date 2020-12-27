@@ -82,6 +82,9 @@ resource "aws_launch_configuration" "lb_instance1" {
   instance_type = "t3.micro"
   user_data = file("user_script.sh")
   security_groups = [ aws_security_group.my_webserver.id ]  
+    lifecycle {
+      create_before_destroy = true
+  }
 }
 resource "aws_elb" "lb_example" {
     name = "mylbexample"
